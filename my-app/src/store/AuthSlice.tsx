@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios"; // Import axios library
+import axios from "axios"; // Импортируйте библиотеку axios
 
 export interface User {
+  id: string
   username: string;
   password: string;
   roles: string;
@@ -15,7 +16,7 @@ export interface AuthState {
 }
 
 interface forArgs {
-  login: string;
+  email: string;
   password: string;
 }
 
@@ -26,36 +27,47 @@ const initialState: AuthState = {
   error: null,
 };
 
+// Создайте асинхронные Thunk-функции для регистрации и входа
 export const registr = createAsyncThunk(
   "reg/user",
-  async ({ login, password }: forArgs, thunkAPI) => {
+  async ({ email, password }: forArgs,) => {
     try {
       const response = await axios.post("http://localhost:9000/auth", {
-        login,
+        email,
         password,
       });
 
       return response.data;
-    } catch (error) {
-      // Handle the error or rethrow it to let Redux Toolkit handle it
-      throw error;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // Обработка ошибки или повторное выбрасывание ее для обработки Redux Toolkit
+        throw error;
+      } else {
+        // Обработка неожиданной ошибки
+        throw new Error("Unexpected error");
+      }
     }
   }
 );
 
 export const signIn = createAsyncThunk(
   "log/user",
-  async ({ login, password }: forArgs, thunkAPI) => {
+  async ({ email, password }: forArgs,) => {
     try {
       const response = await axios.post("http://localhost:9000/login", {
-        login,
+        email,
         password,
       });
       localStorage.setItem("token", response.data);
       return response.data;
-    } catch (error) {
-      // Handle the error or rethrow it to let Redux Toolkit handle it
-      throw error;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // Обработка ошибки или повторное выбрасывание ее для обработки Redux Toolkit
+        throw error;
+      } else {
+        // Обработка неожиданной ошибки
+        throw new Error("Unexpected error");
+      }
     }
   }
 );

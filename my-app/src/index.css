@@ -26,9 +26,12 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  justify-content: space-around;
+  /* place-items: center; */
+  min-width: 900px;
   min-height: 100vh;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 h1 {
